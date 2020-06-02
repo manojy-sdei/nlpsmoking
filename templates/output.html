@@ -1,0 +1,40 @@
+<div class="container">
+<div class="suicide_related_words">
+    <h3>Suicide Monitering Check:</h3>
+    <ul>
+            <li>{{ result[0].suicide_monitering_check }}</li>
+    </ul>
+</div>
+    <div class="method">
+    <h3>Risk Level:</h3>
+    <ul>
+        <li> {{ result[0].risk_level }}
+    </ul>
+</div>
+<div class="method">
+    <h3>Sentiment Score:</h3>
+    <ul>
+        {% for key in result[0].sentiment_score %}
+              <li> {{key}} :{{ result[0].sentiment_score[key] }}</li>
+        {% endfor %}
+    </ul>
+</div>
+    <div class="method">
+    <h3>Suicide Related Words:</h3>
+    <ul>
+        {% for value in result[0].suicide_related_words %}
+              <li>{{ value }}</li>
+        {% endfor %}
+    </ul>
+</div>
+</div>
+<br>
+<center>
+    <form action="/home" method="get" enctype=multipart/form-data>
+    <input type=submit value=AnalyseMore>
+</form>
+
+</center>
+    <form action="/visualize" method="get" enctype=multipart/form-data>
+    <input type=submit value=VisualizeData>
+</form>
