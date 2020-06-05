@@ -76,6 +76,7 @@ class Visualize(Resource):
 
 
 api.add_resource(Visualize, '/visualize')
+
 api.add_resource(ParseReport, '/home')
 api.add_resource(TextAnalyse, '/analyse_text')
 
