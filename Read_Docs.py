@@ -1,11 +1,11 @@
 import pandas as pd
-# from WordCloud import create_word_cloud
+from WordCloud import create_word_cloud
 from collections import defaultdict
 import nltk
-# from nltk.tokenize import word_tokenize, sent_tokenize
+from nltk.tokenize import word_tokenize, sent_tokenize
 import re
 import webvtt
-# from risk_moderate import find_question_related_con
+from risk_moderate import find_question_related_con
 import sys
 # initialisation
 # #import pyttsx3
@@ -81,18 +81,10 @@ def remove_unwanted_entities(text_sent):
 
 
 def identify_file_format_data(filename, file_format, choose_index):
-    print(choose_index)
     if file_format == 'text/csv':
         data = pd.read_csv(filename, encoding="ISO-8859-1")
-        print(data['Encounter - Transcript'][choose_index])
-        # print("the no man")
-        # multiple_session_data = manage_multiple_session(data)
-        # f = open("demofile.txt", "w")
-        # f.write(str(multiple_session_data))
-        # f.close()
-        # print(multiple_session_data)
+        multiple_session_data = manage_multiple_session(data)
         if choose_index is not None:
-            print("here")
             encounter_transcripts = [data['Encounter - Transcript'][choose_index]]
         else:
             encounter_transcripts = data['Encounter - Transcript']
@@ -119,12 +111,7 @@ def Read_data(filename, file_format, choose_index=None):
         result_transcript = None
         print('Processing Document.....')
         encounter_transcripts, data = identify_file_format_data(filename, file_format, choose_index)
-        # print(encounter_transcripts)
-        # print("okay the data here is")
-        # print(encounter_transcripts,data)
-        ##dont use the below function
-        # ques_rel_risk = find_question_related_con(encounter_transcripts)
-        ##
+        ques_rel_risk = find_question_related_con(encounter_transcripts)
         len_encounter_transcripts = len(encounter_transcripts)
         inrease_percent_by = 10/(len_encounter_transcripts/1000*100)
         for index, encounter_transcript in enumerate(encounter_transcripts):
@@ -147,7 +134,7 @@ def Read_data(filename, file_format, choose_index=None):
         #         print(transcript)
         #         engine.say(transcript)
         #         engine.runAndWait()
-        return result_transcript
+        return result_transcript, ques_rel_risk
     except Exception as e:
         print('Error', e)
 

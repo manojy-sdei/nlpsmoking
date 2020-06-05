@@ -5,9 +5,9 @@ from nltk.tokenize import word_tokenize
 from vectorizer import prepare_doc, create_freq_dict, computeTF, computeTFIDF, ComputeIDF
 from n_grams import n_gram_vectorizer
 from Word_net import word_net
-from risk_moderate import check_nicotin_words, check_therapy_words
-# from sentiment_analysis import analyse_sentiment_score
-# from risk_moderate import compute_risk
+from risk_moderate import check_nicotin_words, check_therapy_words, check_high_suicidal_words,check_sucide_monitering
+from sentiment_analysis import analyse_sentiment_score
+from risk_moderate import compute_risk
 stop_words = set(stopwords.words('english'))
 
 
@@ -57,43 +57,27 @@ def analyse_text(filename, file_format):
     :param filename:
     :return: the risk level for the patient
     """
-    result_transcript = Read_data(filename, file_format, choose_index=1)
+    result_transcript, ques_rel_risk = Read_data(filename, file_format, choose_index=1)
     # print("check this")
     # print(result_transcript)
     # exit()
     if result_transcript is None:
         return None
     final_text = remove_unwanted_words(result_transcript)
-    # print(final_text)
-    # print("final_text")
-    ##comment this below
-    # sentiment_score = analyse_sentiment_score(result_transcript)
-    ##
+    sentiment_score = analyse_sentiment_score(result_transcript)
     word_freq = word_net(final_text)
-    # print(word_freq)
     doc_info = prepare_doc(final_text)
-    # print(doc_info)
     ngram_features, bigram_features, trigram_features = n_gram_vectorizer(final_text)
-    final_feature = [ngram_features, bigram_features, trigram_features]
-    f = open("test.txt", "a")
-    f.write(str(final_feature)+"\n")
-    f.close()
+    high_risk, suicide_related_words = check_high_suicidal_words(ngram_features)
+    # f = open("test.txt", "a")
+    # f.write(str(final_feature)+"\n")
+    # f.close()
     therapy_words = check_therapy_words(ngram_features, bigram_features, trigram_features)
     nicotin_words = check_nicotin_words(ngram_features, bigram_features, trigram_features)
-    # print(ngram_features)
-    # print("above this")
-    ##comment
-    # high_risk, suicide_related_words = check_high_suicidal_words(ngram_features)
-    ##
     freqDict_list = create_freq_dict(final_text)
-    # print(freqDict_list)
     TF_scores = computeTF(doc_info, freqDict_list)
     IDF_scores = ComputeIDF(doc_info, freqDict_list)
     scores = computeTFIDF(TF_scores, IDF_scores)
-    # print(TF_scores, IDF_scores, scores)
-    print(scores)
-    ##comment below words
-    # print(nicotin_words)
     if nicotin_words:
         nicotin_check = True
     else:
@@ -102,11 +86,11 @@ def analyse_text(filename, file_format):
         therapy_check = True
     else:
         therapy_check = False
-    # risk_level_score = compute_report_score(scores)
-    # risk_level_score += high_risk+ques_rel_risk
-    ##
-    # print('Risk level score {}% '.format(risk_level_score))
-    # final_res = compute_risk(risk_level_score, sentiment_score, suicide_related_words, suicide_check)
-    return nicotin_check, nicotin_words, therapy_check, therapy_words
+    suicide_check = check_sucide_monitering(scores, ngram_features)
+    risk_level_score = compute_report_score(scores)
+    risk_level_score += high_risk+ques_rel_risk
+    print('Risk level score {}% '.format(risk_level_score))
+    final_res = compute_risk(risk_level_score, sentiment_score, suicide_related_words, suicide_check)
+    return nicotin_check, nicotin_words, therapy_check, therapy_words, final_res
 
 #analyse_text(sys.argv[1])

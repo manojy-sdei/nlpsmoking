@@ -18,11 +18,12 @@ res_format = {
 
 class TextAnalyse(Resource):
     def _process_file(self, file_path, file_format):
-        nicotin_result, nicotin_words, therapy_result, therapy_words = analyse_text(file_path, file_format)
+        nicotin_result, nicotin_words, therapy_result, therapy_words, final_res = analyse_text(file_path, file_format)
         res_format['nicotin_check'] = nicotin_result
         res_format['therapy_check'] = therapy_result
         res_format['nicotin_words'] = nicotin_words
         res_format['therapy_words'] = therapy_words
+        res_format['suicide_monitoring_data'] = final_res
         # res_format['data'] = final_res
         return res_format
 
