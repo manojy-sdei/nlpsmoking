@@ -5,9 +5,12 @@ from nltk.tokenize import word_tokenize
 from vectorizer import prepare_doc, create_freq_dict, computeTF, computeTFIDF, ComputeIDF
 from n_grams import n_gram_vectorizer
 from Word_net import word_net
-from risk_moderate import check_nicotin_words, check_therapy_words, check_high_suicidal_words,check_sucide_monitering
+from risk_moderate import check_nicotin_words, check_therapy_words, check_high_suicidal_words, check_sucide_monitering
 from sentiment_analysis import analyse_sentiment_score
 from risk_moderate import compute_risk
+from risk_moderate import find_question_related_con_change
+import ast
+
 stop_words = set(stopwords.words('english'))
 
 
@@ -61,6 +64,7 @@ def analyse_text(filename, file_format):
     # print("check this")
     # print(result_transcript)
     # exit()
+    print(result_transcript)
     if result_transcript is None:
         return None
     final_text = remove_unwanted_words(result_transcript)
@@ -88,9 +92,51 @@ def analyse_text(filename, file_format):
         therapy_check = False
     suicide_check = check_sucide_monitering(scores, ngram_features)
     risk_level_score = compute_report_score(scores)
-    risk_level_score += high_risk+ques_rel_risk
+    risk_level_score += high_risk + ques_rel_risk
     print('Risk level score {}% '.format(risk_level_score))
     final_res = compute_risk(risk_level_score, sentiment_score, suicide_related_words, suicide_check)
     return nicotin_check, nicotin_words, therapy_check, therapy_words, final_res
 
-#analyse_text(sys.argv[1])
+
+def analyse_text_data(vtt_data):
+    # result_transcript, ques_rel_risk = Read_data(filename, file_format, choose_index=1)
+    # print("check this")
+    # print(result_transcript)
+    # exit()
+    print("vtt_data:-" + vtt_data)
+    result_transcript = ast.literal_eval(vtt_data)
+    ques_rel_risk = find_question_related_con_change(list(result_transcript))
+    print("result_transcripts:-" + str(result_transcript))
+    # print(result_transcript)
+    if result_transcript is None:
+        return None
+    final_text = remove_unwanted_words(result_transcript)
+    sentiment_score = analyse_sentiment_score(result_transcript)
+    word_freq = word_net(final_text)
+    doc_info = prepare_doc(final_text)
+    ngram_features, bigram_features, trigram_features = n_gram_vectorizer(final_text)
+    high_risk, suicide_related_words = check_high_suicidal_words(ngram_features)
+    # f = open("test.txt", "a")
+    # f.write(str(final_feature)+"\n")
+    # f.close()
+    therapy_words = check_therapy_words(ngram_features, bigram_features, trigram_features)
+    nicotin_words = check_nicotin_words(ngram_features, bigram_features, trigram_features)
+    freqDict_list = create_freq_dict(final_text)
+    TF_scores = computeTF(doc_info, freqDict_list)
+    IDF_scores = ComputeIDF(doc_info, freqDict_list)
+    scores = computeTFIDF(TF_scores, IDF_scores)
+    if nicotin_words:
+        nicotin_check = True
+    else:
+        nicotin_check = False
+    if therapy_words:
+        therapy_check = True
+    else:
+        therapy_check = False
+    suicide_check = check_sucide_monitering(scores, ngram_features)
+    risk_level_score = compute_report_score(scores)
+    risk_level_score += high_risk + ques_rel_risk
+    print('Risk level score {}% '.format(risk_level_score))
+    final_res = compute_risk(risk_level_score, sentiment_score, suicide_related_words, suicide_check)
+    return nicotin_check, nicotin_words, therapy_check, therapy_words, final_res
+# analyse_text(sys.argv[1])

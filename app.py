@@ -1,19 +1,69 @@
 from flask import Flask, request, make_response, render_template
 from flask_restful import Resource, Api
-from main import analyse_text
+from main import analyse_text, analyse_text_data
 import os
-# import json
+from multiprocessing import Process
+import asyncio
+import requests
 
 app = Flask(__name__)
 api = Api(app)
 app.config.from_pyfile('config_flask_development.py')
 file_path = app.config['SAVE_DOC']
+
+
 # print(file_path)
 # exit()
-res_format = {
-    'code': '200',
-    'message': 'Success'
-}
+# res_format = {
+#     'code': '200',
+#     'message': 'Success'
+# }
+
+
+class AnalyzeData(Resource):
+    def post(self):
+        print(request.headers['Authorization'])
+        print(app.config['TOKEN'])
+        if request.headers['Authorization'] == app.config['TOKEN']:
+            json_data = request.get_json()
+            recno = json_data['recno']
+            vtt_data = json_data['vtt']
+            asyncio.run(self._process_data(vtt_data, recno))
+            # p = Process(target=self._process_data, args=(vtt_data, recno,))
+            # p.start()
+            res_format = {
+                'code': '200',
+                'message': 'Success'
+            }
+            return res_format
+        else:
+            res_format = {
+                'code': '401',
+                'message': 'Invalid Token',
+            }
+            return res_format
+
+    async def _process_data(self, vtt_data, recno):
+        nicotin_result, nicotin_words, therapy_result, therapy_words, final_res = analyse_text_data(vtt_data)
+        res_format = {'to': 'bnw746y6w',
+                      'data': ({"3": recno, 'nicotin_check': nicotin_result, 'therapy_check': therapy_result,
+                                'nicotin_words': nicotin_words, 'therapy_words': therapy_words,
+                                'suicide_monitoring_data': final_res})}
+        headers = {'QB-Realm-Hostname': 'brighthearthealth.quickbase.com',
+                   'Authorization': 'QB-USER-TOKEN b33nnm_k85g_vp75yvpxx9ce24qi3ibt75uhe'}
+        response = requests.post('http://127.0.0.1:8001/show_data', json=res_format, headers=headers)
+        print(response.text)
+        print(res_format)
+        # return response.json
+        # res_format['data'] = final_res
+        # return res_format
+
+
+class ShowData(Resource):
+    def post(self):
+        req_data = request.get_json()
+        print(req_data)
+        return req_data
 
 
 class TextAnalyse(Resource):
@@ -76,9 +126,10 @@ class Visualize(Resource):
 
 
 api.add_resource(Visualize, '/visualize')
-
 api.add_resource(ParseReport, '/home')
 api.add_resource(TextAnalyse, '/analyse_text')
+api.add_resource(AnalyzeData, '/analyze_data')
+api.add_resource(ShowData, '/show_data')
 
 if __name__ == '__main__':
-    app.run(debug=True, port='8001')
+    app.run(host='0.0.0.0', debug=True, port='8001')

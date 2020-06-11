@@ -8,13 +8,14 @@ suicide_monitering_check = {
                      'adhd', 'tbi', 'ptsd', 'antisocial behaviours', 'aggression', 'impulsivity', 'anhedonia',
                      'hopelessness', 'anxiety', 'panic', 'insomnia', 'hallucinations', 'humiliation', 'shame',
                      'despair', 'humiliate', 'anger', 'fear', 'pain', 'intoxication', 'turmoil', 'chaos', 'hurt',
-                     'physical abuse','sexual abuse', 'abuse', 'social isolation', 'isolation', 'depression',
+                     'physical abuse', 'sexual abuse', 'abuse', 'social isolation', 'isolation', 'depression',
                      'frustration', 'frustrating''unwise', 'temptations', 'harm', 'darkness', 'shock', 'sick',
-                     'provider', 'treatment change','co morbidity', 'morbidity', 'lawlessness', 'riot'],
+                     'provider', 'treatment change', 'co morbidity', 'morbidity', 'lawlessness', 'riot'],
     'PROTECTIVE_FACTORS': ['cope', 'stress', 'religious beliefs', 'beliefs', 'believe', 'tolerance',
                            'frustration tolerance', 'social supports'],
     'SUICIDE_INQUIRY': ['thoughts', 'frequency', 'intensity', 'plans', 'behaviour', 'intent', 'ideas'
-                        'attempts', 'past attempts', 'aborted attempts', 'rehearsals']
+                                                                                              'attempts',
+                        'past attempts', 'aborted attempts', 'rehearsals']
 }
 
 nicotin_words = ['nicotine', 'cigarettes', 'chew', 'vape', 'vape pen', 'juul', 'tobacco', 'smoking', 'smoke', 'dipping',
@@ -69,6 +70,7 @@ def check_therapy_words(n_gram_vectorizer, bigram_vectorizer, trigram_vectorizer
             thrapy_related_word.append(words)
     return thrapy_related_word
 
+
 def check_sucide_monitering(scores, ngram_features):
     risk_score = 0
     protective_score = 0
@@ -89,7 +91,7 @@ def check_sucide_monitering(scores, ngram_features):
             suicide_score += 1
     risk_percent = risk_score / len(suicide_monitering_check['RISK_FACTORS']) * 100
     protective_percent = protective_score / len(suicide_monitering_check['PROTECTIVE_FACTORS']) * 100
-    suicide_percent = suicide_score/len(suicide_monitering_check['SUICIDE_INQUIRY'])*100
+    suicide_percent = suicide_score / len(suicide_monitering_check['SUICIDE_INQUIRY']) * 100
     if risk_percent >= 50.0 and protective_percent >= 50.0 and suicide_percent >= 50.0:
         suicide_monitering_check_result = 'Y'
     else:
@@ -152,7 +154,6 @@ def compute_question_based_risk(check_tokens):
     risk = 0
     for word in word_tokenize(check_tokens.lower()):
         if word in ['yeah', 'yes']:
-
             risk += 20
     return risk
 
@@ -162,13 +163,30 @@ def find_question_related_con(transcript):
     for index, sent in enumerate(transcript[0]):
         word_tokens = word_tokenize(sent)
         if 'suicide' in word_tokens:
-            risk = compute_question_based_risk(transcript[0][index+1])
+            risk = compute_question_based_risk(transcript[0][index + 1])
             total_risk += risk
         if 'self' in word_tokens:
             if 'harm' in word_tokens:
-                risk = compute_question_based_risk(transcript[0][index+1])
+                risk = compute_question_based_risk(transcript[0][index + 1])
                 total_risk += risk
             if 'hurt' in word_tokens:
-                risk = compute_question_based_risk(transcript[0][index+1])
+                risk = compute_question_based_risk(transcript[0][index + 1])
+                total_risk += risk
+    return total_risk
+
+
+def find_question_related_con_change(transcript):
+    total_risk = 0
+    for index, sent in enumerate(transcript[0]):
+        word_tokens = word_tokenize(sent)
+        if 'suicide' in word_tokens:
+            risk = compute_question_based_risk(transcript[0][index + 1])
+            total_risk += risk
+        if 'self' in word_tokens:
+            if 'harm' in word_tokens:
+                risk = compute_question_based_risk(transcript[0][index + 1])
+                total_risk += risk
+            if 'hurt' in word_tokens:
+                risk = compute_question_based_risk(transcript[0][index + 1])
                 total_risk += risk
     return total_risk

@@ -111,6 +111,7 @@ def Read_data(filename, file_format, choose_index=None):
         result_transcript = None
         print('Processing Document.....')
         encounter_transcripts, data = identify_file_format_data(filename, file_format, choose_index)
+        print(encounter_transcripts)
         ques_rel_risk = find_question_related_con(encounter_transcripts)
         len_encounter_transcripts = len(encounter_transcripts)
         inrease_percent_by = 10/(len_encounter_transcripts/1000*100)
