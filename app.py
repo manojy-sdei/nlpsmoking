@@ -64,7 +64,7 @@ class AnalyzeData(Resource):
                                 })}
         headers = {'QB-Realm-Hostname': 'brighthearthealth.quickbase.com',
                    'Authorization': 'QB-USER-TOKEN b33nnm_k85g_vp75yvpxx9ce24qi3ibt75uhe'}
-        response = requests.post('http://127.0.0.1:8001/show_data', json=res_format, headers=headers)
+        response = requests.post('https://api.quickbase.com/v1/records', json=res_format, headers=headers)
         print(response.text)
         print(res_format)
         # return response.json
