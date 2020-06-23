@@ -142,4 +142,4 @@ api.add_resource(AnalyzeData, '/analyse_data')
 api.add_resource(ShowData, '/show_data')
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', debug=True, port='8001')
+    app.run(host='0.0.0.0', debug=True, port='8085')

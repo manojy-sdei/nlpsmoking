@@ -21,20 +21,19 @@ suicide_monitering_check = {
 nicotin_words = ['nicotine', 'cigarettes', 'chew', 'vape', 'vape pen', 'juul', 'tobacco', 'smoking', 'smoke', 'dipping',
                  ' e-cigarette', 'chewing', 'chewed', 'cigarette']
 
-therapy_words = ['cessation', 'stopping', 'quitting', 'benefits of quitting smoking', 'benefits of smoking cessation',
+therapy_words = ['cessation', 'stopping', 'quitting', 'benefits of quitting', 'benefits of smoking cessation',
                  'challenges of quitting', 'barriers of quitting', 'challenges with stopping', 'barriers to stopping',
                  'risks of smoking', 'risks of vaping', 'risks of nicotine', 'Bupropion', 'sustained release',
                  'Varenicline', 'Nicotine gum', 'Nicotine inhaler', 'Nicotine lozenge', 'Nicotine patch', 'Nicotrol',
                  'Nasal spray', 'lozenge', 'gum', 'Chantix', 'Wellbutrin', 'Zyban', 'nicotine placebo', 'marijuana card']
 
-therapy_intervention = {
-    "Ask": "['', '', '']",
-    "Advice": "['', '', '']",
-    "Assess": "['']",
-    "Assist": "['']",
-    "Arrange": "['']",
-
-}
+# therapy_intervention = {
+#     "Ask": "['', '', '']",
+#     "Advice": "['', '', '']",
+#     "Assess": "['']",
+#     "Assist": "['']",
+#     "Arrange": "['']",
+# }
 
 
 def check_nicotin_words(n_gram_vectorizer, bigram_vectorizer, trigram_vectorizer):
