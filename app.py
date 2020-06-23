@@ -5,6 +5,7 @@ import os
 from multiprocessing import Process
 import asyncio
 import requests
+import wget
 
 app = Flask(__name__)
 api = Api(app)
@@ -21,14 +22,22 @@ file_path = app.config['SAVE_DOC']
 
 
 class AnalyzeData(Resource):
+    def save_file(self, recno, url):
+        r = requests.get(url)
+        abs_path = os.path.join(file_path, recno)
+        cmd = "wget -O " + abs_path + ".vtt " + url
+        os.system(cmd)
+        return abs_path
+
     def post(self):
         # print(request.headers['Authorization'])
         # print(app.config['TOKEN'])
         # if request.headers['Authorization'] == app.config['TOKEN']:
         json_data = request.get_json()
         recno = json_data['recno']
-        vtt_data = json_data['vtt']
-        asyncio.run(self._process_data(vtt_data, recno))
+        url = json_data['vtt']
+        abs_path = self.save_file(recno, url)
+        asyncio.run(self._process_data(abs_path, recno, file_format='text/vtt'))
         # p = Process(target=self._process_data, args=(vtt_data, recno,))
         # p.start()
         res_format = {
@@ -43,9 +52,9 @@ class AnalyzeData(Resource):
         #     }
         #     return res_format
 
-    async def _process_data(self, vtt_data, recno):
+    async def _process_data(self, file_path, recno, file_format):
         nicotin_result, nicotin_words, therapy_result, therapy_words, suicide_monitering_check, risk, sentiment_score, suicide_related_words = analyse_text_data(
-            vtt_data)
+            file_path, file_format)
         """Nicotine Check fid  152 boolean
         Nicotine Check Words  fid 153 text
         Nicotine Therapy Provided fid  129 boolean

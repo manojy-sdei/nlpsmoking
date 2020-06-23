@@ -98,15 +98,15 @@ def analyse_text(filename, file_format):
     return nicotin_check, nicotin_words, therapy_check, therapy_words, final_res
 
 
-def analyse_text_data(vtt_data):
-    # result_transcript, ques_rel_risk = Read_data(filename, file_format, choose_index=1)
+def analyse_text_data(filename, file_format):
+    result_transcript, ques_rel_risk = Read_data(filename, file_format, choose_index=1)
     # print("check this")
-    # print(result_transcript)
+    print(result_transcript)
     # exit()
-    print("vtt_data:-" + vtt_data)
-    result_transcript = ast.literal_eval(vtt_data)
-    ques_rel_risk = find_question_related_con_change(list(result_transcript))
-    print("result_transcripts:-" + str(result_transcript))
+    # print("vtt_data:-" + vtt_data)
+    # result_transcript = ast.literal_eval(vtt_data)
+    # ques_rel_risk = find_question_related_con_change(list(result_transcript))
+    # print("result_transcripts:-" + str(result_transcript))
     # print(result_transcript)
     if result_transcript is None:
         return None
