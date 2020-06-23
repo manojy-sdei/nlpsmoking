@@ -25,7 +25,7 @@ therapy_words = ['cessation', 'stopping', 'quitting', 'benefits of quitting smok
                  'challenges of quitting', 'barriers of quitting', 'challenges with stopping', 'barriers to stopping',
                  'risks of smoking', 'risks of vaping', 'risks of nicotine', 'Bupropion', 'sustained release',
                  'Varenicline', 'Nicotine gum', 'Nicotine inhaler', 'Nicotine lozenge', 'Nicotine patch', 'Nicotrol',
-                 'Nasal spray', 'lozenge', 'gum', 'Chantix', 'Wellbutrin', 'Zyban']
+                 'Nasal spray', 'lozenge', 'gum', 'Chantix', 'Wellbutrin', 'Zyban', 'nicotine placebo', 'marijuana card']
 
 therapy_intervention = {
     "Ask": "['', '', '']",
@@ -122,15 +122,15 @@ def compute_risk(risk_val, sentiment_score, suicide_related_words, suicide_monit
     :param sentiment_score:
     :return: risk data
     """
-    risk_data = []
+    # risk_data = []
     risk = risk_level(risk_val)
-    risk_data.append({
-        'suicide_monitering_check': suicide_monitering_check,
-        'risk_level': risk,
-        'sentiment_score': sentiment_score,
-        'suicide_related_words': suicide_related_words
-    })
-    return risk_data
+    # risk_data.append({
+    #     '77': suicide_monitering_check, #suicide_monitering_check
+    #     '78': risk, #risk_level
+    #     '93': sentiment_score, #sentiment_score
+    #     '94': suicide_related_words #suicide_related_words
+    # })
+    return suicide_monitering_check, risk, sentiment_score, suicide_related_words
 
 
 def check_high_suicidal_words(n_gram_vectorizer):

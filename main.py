@@ -137,6 +137,6 @@ def analyse_text_data(vtt_data):
     risk_level_score = compute_report_score(scores)
     risk_level_score += high_risk + ques_rel_risk
     print('Risk level score {}% '.format(risk_level_score))
-    final_res = compute_risk(risk_level_score, sentiment_score, suicide_related_words, suicide_check)
-    return nicotin_check, nicotin_words, therapy_check, therapy_words, final_res
+    suicide_monitering_check, risk, sentiment_score, suicide_related_words = compute_risk(risk_level_score, sentiment_score, suicide_related_words, suicide_check)
+    return nicotin_check, nicotin_words, therapy_check, therapy_words, suicide_monitering_check, risk, sentiment_score, suicide_related_words
 # analyse_text(sys.argv[1])
