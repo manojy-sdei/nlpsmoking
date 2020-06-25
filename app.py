@@ -24,7 +24,7 @@ file_path = app.config['SAVE_DOC']
 class AnalyzeData(Resource):
     def save_file(self, recno, url):
         r = requests.get(url)
-        abs_path = os.path.join(file_path, recno)
+        abs_path = os.path.join(file_path, recno+".vtt")
         cmd = "wget -O " + abs_path + ".vtt " + url
         os.system(cmd)
         return abs_path+".vtt"
@@ -37,7 +37,11 @@ class AnalyzeData(Resource):
         recno = json_data['recno']
         url = json_data['vtt']
         abs_path = self.save_file(recno, url)
+<<<<<<< HEAD
         print("iaflklsdkfjlkasdjlfjlsadjlfjsadlkjflasdjlkflkasdljl"+abs_path)
+=======
+        print(abs_path)
+>>>>>>> 96d31aac0433e056fd75e95d5d87837509dd3509
         asyncio.run(self._process_data(abs_path, recno, file_format='text/vtt'))
         # p = Process(target=self._process_data, args=(vtt_data, recno,))
         # p.start()
