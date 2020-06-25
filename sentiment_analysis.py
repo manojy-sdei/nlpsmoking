@@ -32,4 +32,4 @@ def analyse_sentiment_score(sentences):
     pos, neg = prepare_formulae(pos, neg)
     sentiment_score['pos_analysis'] = pos
     sentiment_score['neg_analysis'] = neg
-    return sentiment_score
+    return sentiment_score, pos, neg

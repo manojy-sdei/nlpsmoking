@@ -24,7 +24,7 @@ file_path = app.config['SAVE_DOC']
 class AnalyzeData(Resource):
     def save_file(self, recno, url):
         r = requests.get(url)
-        abs_path = os.path.join(file_path, recno+".vtt")
+        abs_path = os.path.join(file_path, recno)
         cmd = "wget -O " + abs_path + ".vtt " + url
         os.system(cmd)
         return abs_path+".vtt"
@@ -37,11 +37,6 @@ class AnalyzeData(Resource):
         recno = json_data['recno']
         url = json_data['vtt']
         abs_path = self.save_file(recno, url)
-<<<<<<< HEAD
-        print("iaflklsdkfjlkasdjlfjlsadjlfjsadlkjflasdjlkflkasdljl"+abs_path)
-=======
-        print(abs_path)
->>>>>>> 96d31aac0433e056fd75e95d5d87837509dd3509
         asyncio.run(self._process_data(abs_path, recno, file_format='text/vtt'))
         # p = Process(target=self._process_data, args=(vtt_data, recno,))
         # p.start()
@@ -58,7 +53,7 @@ class AnalyzeData(Resource):
         #     return res_format
 
     async def _process_data(self, file_path, recno, file_format):
-        nicotin_result, nicotin_words, therapy_result, therapy_words, suicide_monitering_check, risk, sentiment_score, suicide_related_words = analyse_text_data(
+        nicotin_result, nicotin_words, therapy_result, therapy_words, suicide_monitering_check, risk, pos, neg, suicide_related_words = analyse_text_data(
             file_path, file_format)
         """Nicotine Check fid  152 boolean
         Nicotine Check Words  fid 153 text
@@ -66,16 +61,23 @@ class AnalyzeData(Resource):
         Nicotine Therapy Words  fid 154 text
         Suicide Risk Checked  fid 77 boolean
         Suicide Risk Level  fid 78 - Values: Low Moderate High
-        Suicide Sentiment Analysis  fid 93 text
+        Suicide pos  fid 93 text
+        neg fid 160
         Suicide Related Words  fid 94 text"""
-        res_format = {'to': 'bnw746y6w',
-                      'data': ({"3": recno, '152': nicotin_result, '129': therapy_result,
-                                '153': nicotin_words, '154': therapy_words,
-                                '77': suicide_monitering_check,  # suicide_monitering_check
-                                '78': risk,  # risk_level
-                                '93': sentiment_score,  # sentiment_score
-                                '94': suicide_related_words  # suicide_related_words}
-                                })}
+        res_format = {"to": "bnw746y6w",
+                 "data": [{
+                 "3": {"value": int(recno)},
+                 "77": {"value": suicide_monitering_check},
+                 "78": {"value": risk},
+                 "93": {"value": str(pos)},
+                 "160": {"value": str(neg)},
+                 "94": {"value": suicide_related_words},
+                 "152": {"value": nicotin_result},
+                 "153": {"value": nicotin_words},
+                 "129": {"value": therapy_result},
+                 "154": {"value": therapy_words},
+                  }]
+                  }
         headers = {'QB-Realm-Hostname': 'brighthearthealth.quickbase.com',
                    'Authorization': 'QB-USER-TOKEN b33nnm_k85g_vp75yvpxx9ce24qi3ibt75uhe'}
         response = requests.post('https://api.quickbase.com/v1/records', json=res_format, headers=headers)

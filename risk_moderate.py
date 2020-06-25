@@ -39,9 +39,9 @@ therapy_words = ['cessation', 'stopping', 'quitting', 'benefits of quitting', 'b
 def check_nicotin_words(n_gram_vectorizer, bigram_vectorizer, trigram_vectorizer):
     # high_risk = 0
     nicotin_related_word = []
-    print(n_gram_vectorizer)
-    print(bigram_vectorizer)
-    print(trigram_vectorizer)
+    #print(n_gram_vectorizer)
+    #print(bigram_vectorizer)
+    #print(trigram_vectorizer)
     for paired_words in n_gram_vectorizer:
         if paired_words in nicotin_words:
             nicotin_related_word.append(paired_words)
@@ -51,7 +51,7 @@ def check_nicotin_words(n_gram_vectorizer, bigram_vectorizer, trigram_vectorizer
     for words in trigram_vectorizer:
         if words in nicotin_words:
             nicotin_related_word.append(words)
-    print("this is the nicotin_words" + str(nicotin_related_word))
+    #print("this is the nicotin_words" + str(nicotin_related_word))
     return nicotin_related_word
 
 

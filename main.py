@@ -64,11 +64,11 @@ def analyse_text(filename, file_format):
     # print("check this")
     # print(result_transcript)
     # exit()
-    print(result_transcript)
+    #print(result_transcript)
     if result_transcript is None:
         return None
     final_text = remove_unwanted_words(result_transcript)
-    sentiment_score = analyse_sentiment_score(result_transcript)
+    sentiment_score, pos, neg = analyse_sentiment_score(result_transcript)
     word_freq = word_net(final_text)
     doc_info = prepare_doc(final_text)
     ngram_features, bigram_features, trigram_features = n_gram_vectorizer(final_text)
@@ -101,7 +101,7 @@ def analyse_text(filename, file_format):
 def analyse_text_data(filename, file_format):
     result_transcript, ques_rel_risk = Read_data(filename, file_format, choose_index=1)
     # print("check this")
-    print(result_transcript)
+    #print(result_transcript)
     # exit()
     # print("vtt_data:-" + vtt_data)
     # result_transcript = ast.literal_eval(vtt_data)
@@ -111,7 +111,7 @@ def analyse_text_data(filename, file_format):
     if result_transcript is None:
         return None
     final_text = remove_unwanted_words(result_transcript)
-    sentiment_score = analyse_sentiment_score(result_transcript)
+    sentiment_score, pos, neg = analyse_sentiment_score(result_transcript)
     word_freq = word_net(final_text)
     doc_info = prepare_doc(final_text)
     ngram_features, bigram_features, trigram_features = n_gram_vectorizer(final_text)
@@ -138,5 +138,5 @@ def analyse_text_data(filename, file_format):
     risk_level_score += high_risk + ques_rel_risk
     print('Risk level score {}% '.format(risk_level_score))
     suicide_monitering_check, risk, sentiment_score, suicide_related_words = compute_risk(risk_level_score, sentiment_score, suicide_related_words, suicide_check)
-    return nicotin_check, nicotin_words, therapy_check, therapy_words, suicide_monitering_check, risk, sentiment_score, suicide_related_words
+    return nicotin_check, nicotin_words, therapy_check, therapy_words, suicide_monitering_check, risk, pos, neg, suicide_related_words
 # analyse_text(sys.argv[1])
