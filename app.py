@@ -27,7 +27,7 @@ class AnalyzeData(Resource):
         abs_path = os.path.join(file_path, recno)
         cmd = "wget -O " + abs_path + ".vtt " + url
         os.system(cmd)
-        return abs_path
+        return abs_path+".vtt"
 
     def post(self):
         # print(request.headers['Authorization'])
@@ -37,6 +37,7 @@ class AnalyzeData(Resource):
         recno = json_data['recno']
         url = json_data['vtt']
         abs_path = self.save_file(recno, url)
+        print("iaflklsdkfjlkasdjlfjlsadjlfjsadlkjflasdjlkflkasdljl"+abs_path)
         asyncio.run(self._process_data(abs_path, recno, file_format='text/vtt'))
         # p = Process(target=self._process_data, args=(vtt_data, recno,))
         # p.start()
