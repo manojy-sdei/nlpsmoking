@@ -1,7 +1,7 @@
 from nltk.tokenize import word_tokenize
 
 high_risk_words = ['panic attack', 'freaking out', 'high risk', 'self harm', 'self awareness', 'self reflection',
-                   'anxiety attacks', 'hot flashes']
+                   'anxiety attacks', 'hot flashes', 'suicide', 'kill myself', 'die', 'want to die', 'commit suicide', 'suicide attempts', 'hurt myself', 'suicide attempts', 'suicide attempt', 'abuse myself']
 
 suicide_monitering_check = {
     'RISK_FACTORS': ['self harm', 'self injuries', 'injuries', 'suicide attempts', 'aborted', 'prior', 'alcohol',
@@ -132,7 +132,7 @@ def compute_risk(risk_val, sentiment_score, suicide_related_words, suicide_monit
     return suicide_monitering_check, risk, sentiment_score, suicide_related_words
 
 
-def check_high_suicidal_words(n_gram_vectorizer):
+def check_high_suicidal_words(n_gram_vectorizer, bi_gram_vectorizer, tri_gram_vectorizer):
     """
     this function identified the high suicidal risk words in the sentences
     as we have some of the predefined words through which we can compute the
@@ -143,6 +143,14 @@ def check_high_suicidal_words(n_gram_vectorizer):
     high_risk = 0
     suicide_related_word = []
     for paired_words in n_gram_vectorizer:
+        if paired_words in high_risk_words:
+            high_risk += 10
+            suicide_related_word.append(paired_words)
+    for paired_words in bi_gram_vectorizer:
+        if paired_words in high_risk_words:
+            high_risk += 10
+            suicide_related_word.append(paired_words)
+    for paired_words in tri_gram_vectorizer:
         if paired_words in high_risk_words:
             high_risk += 10
             suicide_related_word.append(paired_words)

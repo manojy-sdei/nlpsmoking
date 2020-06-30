@@ -72,7 +72,7 @@ def analyse_text(filename, file_format):
     word_freq = word_net(final_text)
     doc_info = prepare_doc(final_text)
     ngram_features, bigram_features, trigram_features = n_gram_vectorizer(final_text)
-    high_risk, suicide_related_words = check_high_suicidal_words(bigram_features)
+    high_risk, suicide_related_words = check_high_suicidal_words(ngram_features, bigram_features, trigram_features)
     # f = open("test.txt", "a")
     # f.write(str(final_feature)+"\n")
     # f.close()
@@ -90,7 +90,7 @@ def analyse_text(filename, file_format):
         therapy_check = True
     else:
         therapy_check = False
-    suicide_check = check_sucide_monitering(scores, ngram_features)
+    suicide_check = check_sucide_monitering(scores, bigram_features)
     risk_level_score = compute_report_score(scores)
     risk_level_score += high_risk + ques_rel_risk
     print('Risk level score {}% '.format(risk_level_score))
@@ -115,7 +115,7 @@ def analyse_text_data(filename, file_format):
     word_freq = word_net(final_text)
     doc_info = prepare_doc(final_text)
     ngram_features, bigram_features, trigram_features = n_gram_vectorizer(final_text)
-    high_risk, suicide_related_words = check_high_suicidal_words(ngram_features)
+    high_risk, suicide_related_words = check_high_suicidal_words(ngram_features, bigram_features, trigram_features)
     # f = open("test.txt", "a")
     # f.write(str(final_feature)+"\n")
     # f.close()
@@ -133,7 +133,7 @@ def analyse_text_data(filename, file_format):
         therapy_check = True
     else:
         therapy_check = False
-    suicide_check = check_sucide_monitering(scores, ngram_features)
+    suicide_check = check_sucide_monitering(scores, bigram_features)
     risk_level_score = compute_report_score(scores)
     risk_level_score += high_risk + ques_rel_risk
     print('Risk level score {}% '.format(risk_level_score))

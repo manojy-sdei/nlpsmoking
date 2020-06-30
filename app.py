@@ -112,7 +112,7 @@ class TextAnalyse(Resource):
         # try:
         # print(request.form.get())
         file = request.files.get('file')
-        patient_id = request.form.get('patient_id')
+        # patient_id = request.form.get('patient_id')
         if file is None:
             return {'error': 'file is not found in the form data'}
         Fname = file.filename
