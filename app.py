@@ -97,9 +97,31 @@ class ShowData(Resource):
 
 class TextAnalyse(Resource):
     def _process_file(self, file_path, file_format):
-        nicotin_result, nicotin_words, therapy_result, therapy_words, final_res = analyse_text(file_path, file_format)
-        res_format = {'nicotin_check': nicotin_result, 'therapy_check': therapy_result, 'nicotin_words': nicotin_words,
-                      'therapy_words': therapy_words, 'suicide_monitoring_data': final_res}
+        nicotin_result, nicotin_words, therapy_result, therapy_words, suicide_monitering_check, risk, pos, neg, suicide_related_words = analyse_text(
+            file_path, file_format)
+    # nicotin_result, nicotin_words, therapy_result, therapy_words, final_res = analyse_text(file_path, file_format)
+        res_format = {"to": "bnw746y6w",
+                      "data": [{
+                          # "3": {"value": int(recno)},
+                          "77": {"value": suicide_monitering_check},
+                          "78": {"value": risk},
+                          "93": {"value": str(pos)},
+                          "160": {"value": str(neg)},
+                          "94": {"value": suicide_related_words},
+                          "152": {"value": nicotin_result},
+                          "153": {"value": nicotin_words},
+                          "129": {"value": therapy_result},
+                          "154": {"value": therapy_words},
+                      }]
+                      }
+        headers = {'QB-Realm-Hostname': 'brighthearthealth.quickbase.com',
+                   'Authorization': 'QB-USER-TOKEN b33nnm_k85g_vp75yvpxx9ce24qi3ibt75uhe'}
+        # response = requests.post('https://api.quickbase.com/v1/records', json=res_format, headers=headers)
+        # print(response.text)
+        # print(res_format)
+
+        # res_format = {'nicotin_check': nicotin_result, 'therapy_check': therapy_result, 'nicotin_words': nicotin_words,
+                      # 'therapy_words': therapy_words, 'suicide_monitoring_data': final_res}
         # res_format['data'] = final_res
         return res_format
 

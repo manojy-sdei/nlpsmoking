@@ -92,9 +92,9 @@ def check_sucide_monitering(scores, ngram_features):
     protective_percent = protective_score / len(suicide_monitering_check['PROTECTIVE_FACTORS']) * 100
     suicide_percent = suicide_score / len(suicide_monitering_check['SUICIDE_INQUIRY']) * 100
     if risk_percent >= 50.0 and protective_percent >= 50.0 and suicide_percent >= 50.0:
-        suicide_monitering_check_result = 'Y'
+        suicide_monitering_check_result = True
     else:
-        suicide_monitering_check_result = 'N'
+        suicide_monitering_check_result = False
     return suicide_monitering_check_result
 
 
