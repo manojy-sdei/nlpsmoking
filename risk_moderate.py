@@ -1,7 +1,7 @@
 from nltk.tokenize import word_tokenize
 
-high_risk_words = ['panic attack', 'freaking out', 'high risk', 'self harm', 'self awareness', 'self reflection',
-                   'anxiety attacks', 'hot flashes', 'suicide', 'kill myself', 'die', 'want to die', 'commit suicide', 'suicide attempts', 'hurt myself', 'suicide attempts', 'suicide attempt', 'abuse myself']
+high_risk_words = ['panic attack', 'freaking out', 'high risk', 'self harm', 'self awareness', 'self reflection','hurting yourself',
+                   'anxiety attacks', 'hot flashes', 'suicide', 'kill myself', 'die','died', 'want to die', 'commit suicide', 'suicide attempts', 'hurt myself', 'suicide attempts', 'suicide attempt', 'abuse myself']
 
 suicide_monitering_check = {
     'RISK_FACTORS': ['self harm', 'self injuries', 'injuries', 'suicide attempts', 'aborted', 'prior', 'alcohol',
