@@ -170,14 +170,14 @@ def find_question_related_con(transcript):
     for index, sent in enumerate(transcript[0]):
         word_tokens = word_tokenize(sent)
         if 'suicide' in word_tokens:
-            risk = compute_question_based_risk(transcript[0][index + 1])
+            risk = compute_question_based_risk(transcript[0][index])
             total_risk += risk
         if 'self' in word_tokens:
             if 'harm' in word_tokens:
-                risk = compute_question_based_risk(transcript[0][index + 1])
+                risk = compute_question_based_risk(transcript[0][index])
                 total_risk += risk
             if 'hurt' in word_tokens:
-                risk = compute_question_based_risk(transcript[0][index + 1])
+                risk = compute_question_based_risk(transcript[0][index])
                 total_risk += risk
     return total_risk
 
